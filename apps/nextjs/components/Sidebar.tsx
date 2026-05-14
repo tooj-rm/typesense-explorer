@@ -6,15 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Collection } from "@typesense_inspector/core";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 
-const Sidebar = () => {
+const Sidebar = ({ collections, onRefresh, loading }: { collections: Collection[], onRefresh: () => void, loading: boolean }) => {
   const [selected, setSelected] = useState<Collection | null>(null);
-
-  const colletions = [
-    new Collection('books', 108, []),
-    new Collection('categories', 6, []),
-    new Collection('tags', 8, []),
-  ]
 
   return (
     <div className="flex min-h-screen">
@@ -28,17 +23,27 @@ const Sidebar = () => {
         <div
           className="flex justify-between items-center px-4 py-2 mb-3 text-xs uppercase tracking-wider text-muted-foreground">
           <span>Collections</span>
-          <RefreshCw className="h-3 w-3"/>
+          <Button onClick={onRefresh} size="sm" variant="ghost" className="h-3 w-3">
+            <RefreshCw className="h-3 w-3"/>
+          </Button>
         </div>
+
+        {
+          loading && (
+            <div className="flex justify-center items-center w-full">
+              <Spinner className="h-6 w-6 text-primary"/>
+            </div>
+          )
+        }
 
         <nav className="flex flex-col flex-1 gap-2 px-2 pb-3">
           {
-            colletions.length == 0 && (
+            !loading && collections.length == 0 && (
               <p className="px-2 py-4">No collections found</p>
             )
           }
           {
-            colletions.map((c) => (
+            !loading && collections.map((c) => (
               <Button
                 key={c.name}
                 variant="outline"
