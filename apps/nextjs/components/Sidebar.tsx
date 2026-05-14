@@ -8,8 +8,15 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 
-const Sidebar = ({ collections, onRefresh, loading }: { collections: Collection[], onRefresh: () => void, loading: boolean }) => {
-  const [selected, setSelected] = useState<Collection | null>(null);
+type SidebarProps = {
+  collections: Collection[];
+  onRefresh: () => void;
+  loading: boolean;
+  onClick: (collection: Collection) => void;
+  selected?: Collection;
+}
+
+const Sidebar = ({ collections, onRefresh, loading, selected, onClick }: SidebarProps) => {
 
   return (
     <div className="flex min-h-screen">
@@ -47,7 +54,7 @@ const Sidebar = ({ collections, onRefresh, loading }: { collections: Collection[
               <Button
                 key={c.name}
                 variant="outline"
-                onClick={() => setSelected(c)}
+                onClick={() => onClick(c)}
                 className={cn(
                   "group flex w-full justify-between items-center gap-2 rounded-md px-2 py-1.5 text-left",
                   selected?.name !== c.name && "text-foreground/80 hover:bg-accent/50",
