@@ -12,7 +12,8 @@ FROM base AS deps
 COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
 
 COPY apps/*/package.json apps/*/package.json
-COPY packages/*/package.json packages/*/package.json
+COPY packages/core/package.json packages/core/package.json
+COPY packages/adapters/package.json packages/adapters/package.json
 
 RUN pnpm install
 
