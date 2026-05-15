@@ -6,24 +6,32 @@ import { useState } from "react";
 import { Collection } from "@typesense_inspector/core";
 import DocumentsResult from "@/components/DocumentsResult";
 import Footer from "@/components/Footer";
+import { useDocumentsViewModel } from "@/hooks/useDocumentsViewModel";
 
 export default function Home() {
-  const { collections, loading, refresh } = useCollectionViewModel();
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Collection>();
+  const { collections, loading, refresh: refreshCollections } = useCollectionViewModel();
+  const { documents, lastPage } = useDocumentsViewModel(selected?.name ?? '', '*', page, 20);
+
+  const handleCollectionChange = (collection: Collection) => {
+    setSelected(collection);
+    setPage(1);
+  }
 
   return (
     <div className="flex min-h-screen font-sans">
       <Sidebar
         collections={collections}
-        onRefresh={refresh}
+        onRefresh={refreshCollections}
         loading={loading}
         selected={selected}
-        onClick={(c) => setSelected(c)}
+        onClick={handleCollectionChange}
       />
       <main className="flex flex-1 flex-col min-w-0">
         <Header collection={selected}/>
-        <DocumentsResult collection={selected}/>
-        <Footer page={1} totalPages={2}/>
+        <DocumentsResult collection={selected} documents={documents}/>
+        <Footer page={page} lastPage={lastPage} onChangePage={(p) => setPage(p)}/>
       </main>
     </div>
   );
