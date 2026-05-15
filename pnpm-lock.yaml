@@ -10,6 +10,9 @@ importers:
 
   apps/nextjs:
     dependencies:
+      '@typesense_inspector/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
       '@typesense_inspector/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -77,6 +80,22 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
+
+  packages/adapters:
+    dependencies:
+      '@typesense_inspector/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      rimraf:
+        specifier: ^6.1.3
+        version: 6.1.3
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.6
+        version: 4.1.6(@types/node@20.19.41)(msw@2.14.6(@types/node@20.19.41)(typescript@6.0.3))(vite@8.0.12(@types/node@20.19.41)(jiti@2.7.0))
 
   packages/core:
     devDependencies:

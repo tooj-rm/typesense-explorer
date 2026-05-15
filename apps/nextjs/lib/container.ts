@@ -1,8 +1,5 @@
-import {
-  GetCollectionsUseCase,
-  GetDocumentsUseCase,
-  TypesenseRepository,
-} from "@typesense_inspector/core";
+import { GetCollectionsUseCase, GetDocumentsUseCase, } from "@typesense_inspector/core";
+import { TypesenseRepository } from "@typesense_inspector/adapters";
 
 import { httpClient } from "@/lib/http-client";
 import { useConnectStore } from "@/store/connectStore";

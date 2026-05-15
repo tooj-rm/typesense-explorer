@@ -1,5 +1,5 @@
 {
-  "name": "@typesense_inspector/core",
+  "name": "@typesense_inspector/adapters",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -11,6 +11,9 @@
     "test": "vitest"
   },
   "private": true,
+  "dependencies": {
+    "@typesense_inspector/core": "workspace:*"
+  },
   "devDependencies": {
     "rimraf": "^6.1.3",
     "typescript": "^6.0.3",

@@ -1,12 +1,11 @@
 import {
   Collection,
-  CollectionDto,
   CollectionRepository,
   DocumentRepository,
   Documents,
   HttpClient,
-  SearchResponse
 } from "@typesense_inspector/core";
+import { CollectionDto, SearchResponse } from "@typesense_inspector/adapters"
 
 export class TypesenseRepository implements CollectionRepository, DocumentRepository {
   constructor(
