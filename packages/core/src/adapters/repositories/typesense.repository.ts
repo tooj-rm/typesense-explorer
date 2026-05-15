@@ -1,9 +1,29 @@
-import { Collection, CollectionDto, CollectionRepository, HttpClient } from "@typesense_inspector/core";
+import {
+  Collection,
+  CollectionDto,
+  CollectionRepository,
+  DocumentRepository,
+  Documents,
+  HttpClient,
+  SearchResponse
+} from "@typesense_inspector/core";
 
-export class TypesenseRepository implements CollectionRepository {
+export class TypesenseRepository implements CollectionRepository, DocumentRepository {
   private readonly baseUrl = 'http://localhost:8108';
 
   constructor(private readonly httpClient: HttpClient) {
+  }
+
+  async search(collection: string, search: string, page: number, limit: number): Promise<Documents> {
+    const params = {
+      page: page.toString(),
+      limit: limit.toString(),
+      q: search
+    }
+    const query = new URLSearchParams(params).toString();
+    const res = await this.httpClient.get<SearchResponse>(this.baseUrl + `/collections/${collection}/documents/search?${query}`)
+
+    return new Documents(res.search_time_ms, res.found, res.hits.map((hit) => hit.document));
   }
 
   async getCollections(): Promise<Collection[]> {
