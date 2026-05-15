@@ -1,9 +1,19 @@
-import { GetCollectionsUseCase, GetDocumentsUseCase, TypesenseRepository } from "@typesense_inspector/core";
+import {
+  GetCollectionsUseCase,
+  GetDocumentsUseCase,
+  TypesenseRepository,
+} from "@typesense_inspector/core";
+
 import { httpClient } from "@/lib/http-client";
+import { useConnectStore } from "@/store/connectStore";
 
+export const getUseCases = () => {
+  const { host } = useConnectStore.getState();
 
-const repository = new TypesenseRepository(httpClient);
+  const repository = new TypesenseRepository(host, httpClient);
 
-export const getDocuments = new GetDocumentsUseCase(repository);
-
-export const getCollections = new GetCollectionsUseCase(repository);
+  return {
+    getDocuments: new GetDocumentsUseCase(repository),
+    getCollections: new GetCollectionsUseCase(repository),
+  };
+};

@@ -9,9 +9,10 @@ import {
 } from "@typesense_inspector/core";
 
 export class TypesenseRepository implements CollectionRepository, DocumentRepository {
-  private readonly baseUrl = 'http://localhost:8108';
-
-  constructor(private readonly httpClient: HttpClient) {
+  constructor(
+    private readonly baseUrl: string,
+    private readonly httpClient: HttpClient
+  ) {
   }
 
   async search(collection: string, search: string, page: number, limit: number): Promise<Documents> {

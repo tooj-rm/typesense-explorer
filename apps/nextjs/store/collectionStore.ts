@@ -5,7 +5,7 @@ interface CollectionQueryStore {
   selected?: Collection;
   collections: Collection[];
 
-  setSelected: (collection: Collection) => void;
+  setSelected: (collection?: Collection) => void;
   setCollections: (collections: Collection[]) => void;
 }
 

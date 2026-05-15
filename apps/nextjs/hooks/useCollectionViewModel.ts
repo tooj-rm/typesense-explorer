@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useCollectionStore } from "@/store/collectionStore";
 import { toast } from "sonner";
-import { getCollections } from "@/lib/container";
+import { getUseCases } from "@/lib/container";
 
 
 export function useCollectionViewModel() {
   const { collections, setCollections } = useCollectionStore()
   const [loading, setLoading] = useState(true);
+  const { getCollections } = getUseCases()
 
   const load = async () => {
     try {

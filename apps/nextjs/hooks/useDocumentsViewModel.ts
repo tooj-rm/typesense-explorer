@@ -5,9 +5,10 @@ import { toast } from "sonner";
 import { useCollectionStore } from "@/store/collectionStore";
 import { usePaginationStore } from "@/store/paginationStore";
 import { useDocumentStore } from "@/store/documentStore";
-import { getDocuments } from "@/lib/container";
+import { getUseCases } from "@/lib/container";
 
 export function useDocumentsViewModel() {
+  const { getDocuments } = getUseCases()
   const { selected: collection } = useCollectionStore()
   const { page, perPage, search, setTotal } = usePaginationStore()
   const { documents, setDocuments } = useDocumentStore()

@@ -9,15 +9,27 @@ import { Spinner } from "@/components/ui/spinner";
 import { useCollectionStore } from '@/store/collectionStore';
 import { useCollectionViewModel } from "@/hooks/useCollectionViewModel";
 import { usePaginationStore } from "@/store/paginationStore";
+import { useConnectStore } from "@/store/connectStore";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const { loading, refresh } = useCollectionViewModel();
-  const { selected, setSelected, collections } = useCollectionStore()
-  const { reset } = usePaginationStore()
+  const { selected, setSelected, collections, setCollections } = useCollectionStore()
+  const { reset: resetPagination } = usePaginationStore()
+  const { reset: resetConnect } = useConnectStore()
+  const router = useRouter()
+
+  const logout = () => {
+    setSelected()
+    setCollections([])
+    resetConnect()
+    resetPagination()
+    router.push('/')
+  }
 
   const handleCollectionChange = (collection: Collection) => {
     setSelected(collection);
-    reset();
+    resetPagination();
   }
 
   return (
@@ -74,6 +86,7 @@ const Sidebar = () => {
           size="sm"
           variant="ghost"
           className="w-full justify-start"
+          onClick={logout}
         >
           <LogOut className="h-4 w-4"/> Disconnect
         </Button>

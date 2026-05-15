@@ -2,19 +2,19 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
-import { Database, Loader2, Plug } from "lucide-react";
+import { Database, Plug } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import type { SyntheticEvent } from "react";
+import { useConnectStore } from "@/store/connectStore";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [host, setHost] = useState("");
-  const [apiKey, setApiKey] = useState("");
-  const [busy, setBusy] = useState(false);
+  const { host, apiKey, setHost, setApiKey } = useConnectStore()
+  const router = useRouter()
 
   const connect = async (e: SyntheticEvent) => {
     e.preventDefault()
-    setBusy(true);
+    router.push('/dashboard')
   };
 
   return (
@@ -52,15 +52,12 @@ const Page = () => {
               placeholder="search-only or admin key"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
+              type="password"
             />
           </div>
 
-          <Button className="w-full">
-            {busy ? (
-              <Loader2 className="h-4 w-4 animate-spin"/>
-            ) : (
-              <Plug className="h-4 w-4"/>
-            )}
+          <Button className="w-full" onClick={connect}>
+            <Plug className="h-4 w-4"/>
             Connect
           </Button>
 
