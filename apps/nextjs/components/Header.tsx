@@ -1,9 +1,14 @@
-import React from 'react';
-import { FileJson, Filter, Search } from "lucide-react";
-import { Collection } from "@typesense_inspector/core";
-import { Input } from "@/components/ui/input";
+"use client";
 
-const Header = ({ collection }: { collection?: Collection }) => {
+import { FileJson, Filter, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useCollectionStore } from "@/store/collectionStore";
+import { useDocumentStore } from "@/store/documentStore";
+
+const Header = () => {
+  const { selected: collection } = useCollectionStore()
+  const { documents } = useDocumentStore()
+
   return (
     <header className="px-4 py-6 border-b border-border bg-background/60">
       <div className="flex items-center gap-3">
@@ -18,11 +23,13 @@ const Header = ({ collection }: { collection?: Collection }) => {
           }
         </div>
 
-        <div className="ml-auto text-xs text-muted-foreground">
-          <span>7 hits</span>
-          {` • `}
-          <span>4 ms</span>
-        </div>
+        {documents && (
+          <div className="ml-auto text-xs text-muted-foreground">
+            <span>{documents.values.length} hits</span>
+            {` • `}
+            <span>{documents.searchTime}ms</span>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-2 mt-4 md:grid-cols-[1fr_1fr_220px]">

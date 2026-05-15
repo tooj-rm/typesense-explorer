@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Collection, GetCollectionsUseCase, TypesenseRepository } from "@typesense_inspector/core";
+import { GetCollectionsUseCase, TypesenseRepository } from "@typesense_inspector/core";
 import { httpClient } from "@/lib/http-client";
+import { useCollectionStore } from "@/store/collectionStore";
+import { toast } from "sonner";
 
 
 export function useCollectionViewModel() {
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const { collections, setCollections } = useCollectionStore()
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const repository = new TypesenseRepository(httpClient);
   const getCollections = new GetCollectionsUseCase(repository);
@@ -19,7 +20,7 @@ export function useCollectionViewModel() {
       const data = await getCollections.execute();
       setCollections(data);
     } catch (e: any) {
-      setError(e.message);
+      toast.error(e.message);
     } finally {
       setLoading(false);
     }
@@ -30,9 +31,8 @@ export function useCollectionViewModel() {
   }, []);
 
   return {
-    collections: collections,
+    collections,
     loading,
-    error,
     refresh: load,
   };
 }

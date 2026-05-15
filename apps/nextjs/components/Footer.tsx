@@ -1,14 +1,12 @@
-import React from 'react';
+"use client";
+
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { usePaginationStore } from "@/store/paginationStore";
 
-interface Props {
-  page: number;
-  lastPage: number;
-  onChangePage: (page: number) => void;
-}
+const Footer = () => {
+  const { page, lastPage, setPage } = usePaginationStore()
 
-const Footer = ({ page, lastPage, onChangePage }: Props) => {
   return (
     <footer className="flex items-center justify-between border-t border-border px-6 py-3 text-xs text-muted-foreground">
       <div>
@@ -19,14 +17,14 @@ const Footer = ({ page, lastPage, onChangePage }: Props) => {
         <Button
           size="sm"
           variant="outline"
-          onClick={() => onChangePage(Math.max(1, page - 1))}
+          onClick={() => setPage(Math.max(1, page - 1))}
         >
           <ChevronLeft className="h-4 w-4" /> Prev
         </Button>
         <Button
           size="sm"
           variant="outline"
-          onClick={() => onChangePage(Math.min(lastPage, page + 1))}
+          onClick={() => setPage(Math.min(lastPage, page + 1))}
         >
           Next <ChevronRight className="h-4 w-4" />
         </Button>

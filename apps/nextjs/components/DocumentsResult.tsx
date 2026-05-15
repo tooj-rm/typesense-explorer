@@ -1,15 +1,14 @@
-import React from 'react';
-import { Collection, Documents } from "@typesense_inspector/core";
+"use client";
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useCollectionStore } from "@/store/collectionStore";
+import { useDocumentsViewModel } from "@/hooks/useDocumentsViewModel";
 
-type Props = {
-  collection?: Collection;
-  documents?: Documents;
-};
-
-const DocumentsResult = ({ collection, documents }: Props) => {
+const DocumentsResult = () => {
+  const { selected: collection } = useCollectionStore()
   const columns = collection ? ['id', ...collection.fields.map((f) => f.name)] : []
+  const { documents } = useDocumentsViewModel();
 
   return (
     <section className="flex-1 overflow-x-auto px-6 py-4">
@@ -39,7 +38,7 @@ const DocumentsResult = ({ collection, documents }: Props) => {
                       key={col}
                       className="max-w-[280px] truncate"
                     >
-                      <CellValue value={hit[col]} />
+                      <CellValue value={hit[col]}/>
                     </TableCell>
                   ))}
                 </TableRow>

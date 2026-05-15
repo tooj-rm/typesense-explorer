@@ -1,22 +1,24 @@
 "use client";
 
-import { useState } from 'react';
 import { Database, LogOut, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Collection } from "@typesense_inspector/core";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
+import { useCollectionStore } from '@/store/collectionStore';
+import { useCollectionViewModel } from "@/hooks/useCollectionViewModel";
+import { usePaginationStore } from "@/store/paginationStore";
 
-type SidebarProps = {
-  collections: Collection[];
-  onRefresh: () => void;
-  loading: boolean;
-  onClick: (collection: Collection) => void;
-  selected?: Collection;
-}
+const Sidebar = () => {
+  const { loading, refresh } = useCollectionViewModel();
+  const { selected, setSelected, collections } = useCollectionStore()
+  const { reset } = usePaginationStore()
 
-const Sidebar = ({ collections, onRefresh, loading, selected, onClick }: SidebarProps) => {
+  const handleCollectionChange = (collection: Collection) => {
+    setSelected(collection);
+    reset();
+  }
 
   return (
     <aside className="flex flex-col w-64 shrink-0 border-r border-border bg-card/50">
@@ -29,7 +31,7 @@ const Sidebar = ({ collections, onRefresh, loading, selected, onClick }: Sidebar
       <div
         className="flex justify-between items-center px-4 py-2 mb-3 text-xs uppercase tracking-wider text-muted-foreground">
         <span>Collections</span>
-        <Button onClick={onRefresh} size="sm" variant="ghost" className="h-3 w-3">
+        <Button onClick={refresh} size="sm" variant="ghost" className="h-3 w-3">
           <RefreshCw className="h-3 w-3"/>
         </Button>
       </div>
@@ -53,7 +55,7 @@ const Sidebar = ({ collections, onRefresh, loading, selected, onClick }: Sidebar
             <Button
               key={c.name}
               variant="outline"
-              onClick={() => onClick(c)}
+              onClick={() => handleCollectionChange(c)}
               className={cn(
                 "group flex w-full justify-between items-center gap-2 rounded-md px-2 py-1.5 text-left",
                 selected?.name !== c.name && "text-foreground/80 hover:bg-accent/50",
