@@ -3,7 +3,7 @@ import {
   CollectionRepository,
   DocumentRepository,
   Documents,
-  HttpClient,
+  HttpClient, SearchParams,
 } from "@typesense_inspector/core";
 import { CollectionDto, SearchResponse } from "@typesense_inspector/adapters"
 
@@ -14,11 +14,13 @@ export class TypesenseRepository implements CollectionRepository, DocumentReposi
   ) {
   }
 
-  async search(collection: string, search: string, page: number, limit: number): Promise<Documents> {
+  async search(collection: string, { search, page, limit, filterBy, queryBy }: SearchParams): Promise<Documents> {
     const params = {
       page: page.toString(),
       limit: limit.toString(),
-      q: search
+      q: search,
+      filter_by: filterBy,
+      query_by: queryBy
     }
     const query = new URLSearchParams(params).toString();
     const res = await this.httpClient.get<SearchResponse>(this.baseUrl + `/collections/${collection}/documents/search?${query}`)
