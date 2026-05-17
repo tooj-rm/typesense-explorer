@@ -1,19 +1,21 @@
 import { create } from "zustand";
 
-interface PaginationStore {
-  filterBy: string;
+type FilterByInput = { field: string; operator: string; value: string }[]
+
+interface SearchStore {
+  filterBy?: FilterByInput
   queryBy: string;
   search: string,
 
-  setFilterBy: (filterBy: string) => void;
+  setFilterBy: (filterBy: FilterByInput) => void;
   setQueryBy: (queryBy: string) => void;
   setSearch: (search: string) => void;
+  filterByString: () => string;
   reset: () => void;
 }
 
 export const useSearchStore =
-  create<PaginationStore>((set) => ({
-      filterBy: '',
+  create<SearchStore>((set, getState) => ({
       queryBy: '',
       search: '*',
 
@@ -21,8 +23,13 @@ export const useSearchStore =
       setQueryBy: (queryBy) => set({ queryBy }),
       setSearch: (search) => set({ search }),
 
+      filterByString: () => getState()
+        .filterBy
+        ?.map(({ field, operator, value }) => `${field}:${operator}${value}`)
+        .join('&&') ?? '',
+
       reset: () => set({
-        filterBy: '',
+        filterBy: undefined,
         queryBy: ''
       })
     }

@@ -13,18 +13,25 @@ export function useDocumentsViewModel() {
   const { getDocuments } = getUseCases()
   const { selected: collection } = useCollectionStore()
   const { page, perPage, setTotal } = usePaginationStore()
-  const { filterBy, queryBy, search } = useSearchStore()
+  const { filterByString, queryBy, search } = useSearchStore()
   const { documents, setDocuments } = useDocumentStore()
   const [loading, setLoading] = useState(true);
 
-  const debouncedFilterBy = useDebounce(filterBy);
+  const debouncedFilterBy = useDebounce(filterByString());
   const debouncedSearch = useDebounce(search);
   const debouncedQueryBy = useDebounce(queryBy);
 
   const load = async () => {
     try {
+      console.log(filterByString())
       setLoading(true);
-      const data = await getDocuments.execute(collection?.name ?? '', { search, page, limit: perPage, filterBy, queryBy });
+      const data = await getDocuments.execute(collection?.name ?? '', {
+        search,
+        page,
+        limit: perPage,
+        filterBy: filterByString(),
+        queryBy
+      });
       setDocuments(data);
       setTotal(data.total);
     } catch (e: any) {
@@ -35,9 +42,15 @@ export function useDocumentsViewModel() {
   };
 
   useEffect(() => {
-    if(!collection) return
+    if (!collection) return
     load();
-  }, [collection, page, debouncedSearch, debouncedFilterBy]);
+  }, [
+    collection,
+    page,
+    debouncedFilterBy,
+    debouncedSearch,
+    debouncedQueryBy
+  ]);
 
   return {
     documents,
