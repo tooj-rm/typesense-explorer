@@ -14,13 +14,14 @@ export class TypesenseRepository implements CollectionRepository, DocumentReposi
   ) {
   }
 
-  async search(collection: string, { search, page, limit, filterBy, queryBy }: SearchParams): Promise<Documents> {
+  async search(collection: string, { search, page, limit, filterBy, queryBy, sortBy }: SearchParams): Promise<Documents> {
     const params = {
       page: page.toString(),
       limit: limit.toString(),
       q: search,
       filter_by: filterBy,
-      query_by: queryBy
+      query_by: queryBy,
+      sort_by: sortBy
     }
     const query = new URLSearchParams(params).toString();
     const res = await this.httpClient.get<SearchResponse>(this.baseUrl + `/collections/${collection}/documents/search?${query}`)

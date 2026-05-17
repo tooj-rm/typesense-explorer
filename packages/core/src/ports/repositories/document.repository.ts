@@ -6,6 +6,7 @@ export type SearchParams = {
   limit: number;
   filterBy: string;
   queryBy: string;
+  sortBy: string;
 }
 
 export interface DocumentRepository {

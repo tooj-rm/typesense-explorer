@@ -10,7 +10,7 @@ import { usePaginationStore } from "@/store/paginationStore";
 import { QueryByInput } from "./QueryBy";
 
 const Header = () => {
-  const { search, setSearch, filterBy, setFilterBy, queryBy, setQueryBy } = useSearchStore()
+  const { search, setSearch, filterBy, setFilterBy, queryBy, setQueryBy, sortBy, setSortBy } = useSearchStore()
   const { reset } = usePaginationStore()
   const { selected: collection } = useCollectionStore()
   const { documents } = useDocumentStore()
@@ -48,7 +48,7 @@ const Header = () => {
         )}
       </div>
 
-    <div className="grid gap-2 mt-4 md:grid-cols-4">
+      <div className="grid gap-2 mt-4 md:grid-cols-4">
         <div className="relative">
           <MultiSelectAutocomplete
             options={searchableFields}
@@ -83,6 +83,8 @@ const Header = () => {
         <Input
           className="text-sm"
           placeholder="sort_by e.g. price:desc"
+          value={sortBy}
+          onChange={e => setSortBy(e.target.value)}
         />
       </div>
     </header>
